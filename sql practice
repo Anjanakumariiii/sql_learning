@@ -1,0 +1,46 @@
+-- 11. Select with LIKE pattern
+SELECT * FROM Employees WHERE FirstName LIKE 'J%';
+
+-- 12. Select with IN clause
+SELECT * FROM Employees WHERE Department IN ('HR', 'Finance');
+
+-- 13. Select with BETWEEN
+SELECT * FROM Employees WHERE Age BETWEEN 25 AND 35;
+
+-- 14. Aggregate functions - AVG, SUM, MIN, MAX
+SELECT AVG(Age) AS AverageAge FROM Employees;
+
+-- 15. Group by Department and count employees
+SELECT Department, COUNT(*) AS EmployeeCount FROM Employees GROUP BY Department;
+
+-- 16. Having clause to filter grouped data
+SELECT Department, COUNT(*) AS EmployeeCount 
+FROM Employees 
+GROUP BY Department 
+HAVING COUNT(*) > 2;
+
+-- 17. Join two tables (Inner Join)
+CREATE TABLE Departments (
+    DepartmentID INT PRIMARY KEY,
+    DepartmentName VARCHAR(50)
+);
+
+SELECT e.FirstName, e.LastName, d.DepartmentName
+FROM Employees e
+INNER JOIN Departments d ON e.Department = d.DepartmentName;
+
+-- 18. Left Join (returns all from left table)
+SELECT e.FirstName, e.LastName, d.DepartmentName
+FROM Employees e
+LEFT JOIN Departments d ON e.Department = d.DepartmentName;
+
+-- 19. Insert multiple rows
+INSERT INTO Employees (EmployeeID, FirstName, LastName, Age, Department)
+VALUES 
+(2, 'Jane', 'Smith', 28, 'Finance'),
+(3, 'Sam', 'Brown', 40, 'IT');
+
+-- 20. Subquery example
+SELECT * FROM Employees WHERE Department = (
+    SELECT DepartmentName FROM Departments WHERE DepartmentID = 1
+);
