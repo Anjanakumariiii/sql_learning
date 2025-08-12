@@ -1,0 +1,62 @@
+-- 21. Create index to improve search speed
+CREATE INDEX idx_lastname ON Employees(LastName);
+
+-- 22. Use EXISTS in subquery
+SELECT * FROM Employees e
+WHERE EXISTS (
+    SELECT 1 FROM Departments d WHERE d.DepartmentName = e.Department AND d.DepartmentID = 2
+);
+
+-- 23. Window functions - ROW_NUMBER
+SELECT FirstName, LastName, Department,
+       ROW_NUMBER() OVER (PARTITION BY Department ORDER BY Age DESC) AS RankByAge
+FROM Employees;
+
+-- 24. Common Table Expression (CTE)
+WITH DeptCount AS (
+    SELECT Department, COUNT(*) AS EmployeeCount FROM Employees GROUP BY Department
+)
+SELECT * FROM DeptCount WHERE EmployeeCount > 1;
+
+-- 25. Recursive CTE (example: hierarchy)
+WITH RECURSIVE EmployeeHierarchy AS (
+    SELECT EmployeeID, FirstName, LastName, ManagerID
+    FROM Employees
+    WHERE ManagerID IS NULL
+    UNION ALL
+    SELECT e.EmployeeID, e.FirstName, e.LastName, e.ManagerID
+    FROM Employees e
+    INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID
+)
+SELECT * FROM EmployeeHierarchy;
+
+-- 26. Pivot query (convert rows to columns)
+SELECT Department,
+       COUNT(CASE WHEN Age < 30 THEN 1 END) AS Under30,
+       COUNT(CASE WHEN Age >= 30 THEN 1 END) AS OverOrEqual30
+FROM Employees
+GROUP BY Department;
+
+-- 27. Full Outer Join (if supported)
+SELECT e.FirstName, d.DepartmentName
+FROM Employees e
+FULL OUTER JOIN Departments d ON e.Department = d.DepartmentName;
+
+-- 28. Dynamic SQL example (depends on RDBMS)
+-- Example in SQL Server
+DECLARE @sql NVARCHAR(MAX);
+SET @sql = 'SELECT * FROM Employees WHERE Department = @dept';
+EXEC sp_executesql @sql, N'@dept VARCHAR(50)', @dept='HR';
+
+-- 29. Transaction example
+BEGIN TRANSACTION;
+UPDATE Employees SET Age = Age + 1 WHERE Department = 'IT';
+COMMIT;
+
+-- 30. Stored Procedure example (SQL Server syntax)
+CREATE PROCEDURE GetEmployeesByDepartment
+    @DeptName VARCHAR(50)
+AS
+BEGIN
+    SELECT * FROM Employees WHERE Department = @DeptName;
+END;
