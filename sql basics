@@ -1,0 +1,36 @@
+-- 1. Create a table
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Age INT,
+    Department VARCHAR(50)
+);
+
+-- 2. Insert data into a table
+INSERT INTO Employees (EmployeeID, FirstName, LastName, Age, Department)
+VALUES (1, 'John', 'Doe', 30, 'HR');
+
+-- 3. Select all columns from a table
+SELECT * FROM Employees;
+
+-- 4. Select specific columns
+SELECT FirstName, LastName FROM Employees;
+
+-- 5. Select with a WHERE condition
+SELECT * FROM Employees WHERE Age > 25;
+
+-- 6. Update a record
+UPDATE Employees SET Age = 31 WHERE EmployeeID = 1;
+
+-- 7. Delete a record
+DELETE FROM Employees WHERE EmployeeID = 1;
+
+-- 8. Order results ascending
+SELECT * FROM Employees ORDER BY Age ASC;
+
+-- 9. Order results descending
+SELECT * FROM Employees ORDER BY Age DESC;
+
+-- 10. Count rows in a table
+SELECT COUNT(*) FROM Employees;
